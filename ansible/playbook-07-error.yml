@@ -1,0 +1,48 @@
+---
+- name: Pulling facts from switches
+  hosts: eosswitches
+  gather_facts: no
+
+  tasks:
+     - block:
+
+             # Collect all facts from the device
+             - name: collect some facts
+               eos_facts:
+                 gather_subset: all
+               tags: zfact
+               when: ansible_network_os == 'eos'
+
+             - name: collect cisco facts
+               ios_facts:
+                 gather_subset: all
+               when: ansible_network_os == 'ios'
+             
+             - name: Precheck step - mimic a fail
+               shell: "/bin/false" #always fail  
+
+             - name: Precheck step
+               fail:
+                 msg: "Playbook Fail!! This is an unexpected number of ports!"
+               when: ansible_facts.net_interfaces|length() != 13        
+             
+             - name: make sure backup exists
+               file:
+                 path: ~/backups/
+                 state: directory
+
+             - name: dump config out to file
+               copy:
+                 content: "{{ ansible_facts.net_config }}" 
+                 dest: ~/backups/{{ inventory_hostname }}.bkup
+       rescue:
+           - name: Precheck Failed
+             fail: 
+               msg: "Precheck phase - FAILED.  EXITING."
+
+            # - name: show what is in results
+               #debug:
+               # var: ansible_facts.net_interfaces|length()
+               # tags:
+               # - zfact
+

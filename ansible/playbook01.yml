@@ -1,0 +1,7 @@
+---
+- hosts: planet-express
+  tasks:
+  - apt:
+      name: figlet
+      state: absent 
+    become: True    

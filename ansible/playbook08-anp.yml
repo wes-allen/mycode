@@ -1,0 +1,33 @@
+---
+- name: Another Playbook example
+  hosts: ~^arista
+  gather_facts: no
+
+  vars: 
+    switchint: 13
+    switchver: "4.17"
+
+  tasks:
+
+  - name: Harvest Arista facts
+    eos_facts:
+    when: ansible_network_os == 'eos'
+    tags:
+      - grabfacts      
+  - name: copy to local system by special request
+    copy:
+      content: "{{ ansible_facts | to_nice_json }}"
+      dest: "/home/student/mycode/{{ inventory_hostname }}.txt"
+    tags: 
+      - never
+      - grabfacts
+
+  - fail: 
+      msg: "FAIL.  Network device lacks the correct number of interfaces"
+    when: ansible_facts.net_interfaces|length != switchint
+
+  - fail: 
+      msg: "FAIL.  Network device lacks the correct major or minor version"
+    when: "Switch version not in ansible_facts.net_version"
+
+      

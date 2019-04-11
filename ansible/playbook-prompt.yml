@@ -1,0 +1,21 @@
+---
+
+- name: Learning about prompts
+  hosts: localhost
+
+  vars_prompt:
+     - name: scrappydoo
+       prompt: "What is the value of scrappy?"
+       ## do not echo password
+       private: yes
+       ## encrypt this value
+       encrypt: "sha512_crypt"
+       ##confirm password
+       confirm: yes
+       ##set a default value
+       default: "tiny little doge"
+
+       tasks:
+         - name: display a variable value
+           debug:
+             var: scrappydoo     

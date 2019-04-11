@@ -1,0 +1,22 @@
+---
+- name: Playbook to deploy software
+  hosts: planet-express
+  tasks:
+
+  - name: Modify state of figlet software        
+    apt:
+      name: figlet
+      state: present
+    become: True    
+    register: results
+
+  - name: show our results
+    debug:
+     var: results.cache_update_time
+#    var: results.["cache_update_time"]
+
+  - name: Modify state of bastet software
+    apt:
+     name: bastet  
+     state: present
+    become: True     
