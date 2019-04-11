@@ -1,7 +1,7 @@
 # mycode
-Learning to track my code
+Learning to track my code.  Learning how to use version control.
 ## Getting Started
-These instructions will give you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will give you a copy of the project up and running on your local machine for development and testing purposes.  
 ### Prerequisites
 What is needed to install the software and how to install.
 ## Built With
